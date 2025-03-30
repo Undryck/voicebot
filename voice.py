@@ -2,8 +2,6 @@ import os
 import uuid
 import asyncio
 import random
-import aiohttp
-import logging
 import sqlite3
 from gtts import gTTS
 from aiogram.types import InputMediaPhoto, InputMediaVideo
@@ -15,12 +13,9 @@ from aiogram.dispatcher import FSMContext
 from aiogram.dispatcher.filters import Command
 from aiogram.dispatcher.filters.state import State, StatesGroup
 from aiogram.types import InlineKeyboardMarkup, InlineKeyboardButton, ReplyKeyboardMarkup, KeyboardButton
-from pydub import AudioSegment
-from pydub.utils import which
-import speech_recognition as sr
 
     # Ініціалізація бота та диспетчера
-bot = Bot(token='7988490161:AAE8vX6zGaXeb5LFWUBSbNfR6RCpABUnW9g')
+bot = Bot(token='6333120732:AAEqHvLkp6x-2JMmkvgqzGtMSJNRvh4Nc_U')
 storage = MemoryStorage()
 dp = Dispatcher(bot, storage=storage)
 dp.middleware.setup(LoggingMiddleware())
@@ -495,7 +490,6 @@ async def process_message(message: types.Message, state: FSMContext):
                     # Якщо не в режимі конвертації, активуємо його
                 await ConvertToVoiceStep.waiting_for_text.set()
                 mainmenu = ReplyKeyboardMarkup(resize_keyboard=True)
-                conv1 = KeyboardButton('Текст ➡ голос')
                 itemenu = KeyboardButton('🔙Меню')
                 mainmenu.row(conv1)
                 mainmenu.row(itemenu)
