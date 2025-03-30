@@ -489,7 +489,6 @@ async def process_message(message: types.Message, state: FSMContext):
                 await ConvertToVoiceStep.waiting_for_text.set()
                 mainmenu = ReplyKeyboardMarkup(resize_keyboard=True)
                 itemenu = KeyboardButton('🔙Меню')
-                mainmenu.row(conv1)
                 mainmenu.row(itemenu)
                 mainmenu.add()
                 await message.answer("Надішліть мені текст, який бажаєте конвертувати в голос", reply_markup=mainmenu)
