@@ -23,8 +23,6 @@ dp.middleware.setup(LoggingMiddleware())
 ADMIN_ID = 5019012143  # ID адміна
 TOKEN = '6333120732:AAEqHvLkp6x-2JMmkvgqzGtMSJNRvh4Nc_U'
 
-AudioSegment.converter = which("ffmpeg")
-
 # Підключення до бази даних
 conn = sqlite3.connect("users.db")
 cursor = conn.cursor()
