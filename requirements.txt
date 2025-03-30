@@ -2,6 +2,7 @@ aiogram==2.23.1
 gtts==2.4.0
 speechrecognition==3.10.0
 pydub==0.25.1
+ffmpeg-python==0.2.0
 ffmpeg==4.4
 ffprobe==0.5
 aiohttp>=3.8.0
