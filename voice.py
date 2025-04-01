@@ -4,6 +4,7 @@ import asyncio
 import random
 import sqlite3
 from gtts import gTTS
+from flask import Flask
 from aiogram.types import InputMediaPhoto, InputMediaVideo
 from aiogram import Bot, Dispatcher, executor, types
 from aiogram.contrib.middlewares.logging import LoggingMiddleware
@@ -707,5 +708,13 @@ async def callback_handler(call: types.CallbackQuery):
 async def register_user(message: types.Message):
     add_user(message.from_user.id, message.from_user.first_name)
 
+app = Flask(__name__)
+
+@app.route('/')
+def home():
+    return "t.me/Voice_text_ua_bot"
+
 if __name__ == '__main__':
     executor.start_polling(dp, skip_updates=True)
+    port = int(os.environ.get("PORT", 8080))
+    app.run(host="0.0.0.0", port=port)
