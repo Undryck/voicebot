@@ -714,7 +714,14 @@ app = Flask(__name__)
 def home():
     return "t.me/Voice_text_ua_bot"
 
+async def start_bot():
+    """Функція для запуску бота"""
+    await dp.start_polling()
+
 if __name__ == '__main__':
-    executor.start_polling(dp, skip_updates=True)
     port = int(os.environ.get("PORT", 8080))
+
+    # Запускаємо Flask і бота в окремих потоках
+    loop = asyncio.get_event_loop()
+    loop.create_task(start_bot())
     app.run(host="0.0.0.0", port=port)
