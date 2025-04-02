@@ -718,10 +718,10 @@ async def start_bot():
     """Функція для запуску бота"""
     await dp.start_polling()
 
-if __name__ == '__main__':
-    port = int(os.environ.get("PORT", 8080))
+async def main():
+    task1 = asyncio.create_task(start_bot())  # Запускаємо бота
+    task2 = asyncio.to_thread(app.run, host="0.0.0.0", port=int(os.environ.get("PORT", 8080)))  # Flask запускаємо у окремому потоці
+    await asyncio.gather(task1, task2)
 
-    # Запускаємо Flask і бота в окремих потоках
-    loop = asyncio.get_event_loop()
-    loop.create_task(start_bot())
-    app.run(host="0.0.0.0", port=port)
+if __name__ == '__main__':
+    asyncio.run(main())  # Запускаємо все разом
