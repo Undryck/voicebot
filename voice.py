@@ -313,6 +313,9 @@ async def start_command(message: types.Message, state: FSMContext):
         await message.answer(greeting_text, parse_mode=types.ParseMode.HTML, reply_markup=markup)
 
     elif message.chat.type in ['group', 'supergroup']:  # Обробка для груп     
+
+        add_user(user_id, first_name)
+        
         greeting_text = f'Привіт, <b>{first_name}!</b> 😊\n💼 Я бот для конвертації тексту у голос 🎙️\n\n<b>Щоб використовувати мої функції у групі:</b>\n✅ Надішліть /voice <i>текст</i> для конвертації\n✅ Використовуйте /lang для вибору мови'
         await message.reply(greeting_text, parse_mode=types.ParseMode.HTML)
 
