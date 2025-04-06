@@ -312,10 +312,7 @@ async def start_command(message: types.Message, state: FSMContext):
         await state.finish()
         await message.answer(greeting_text, parse_mode=types.ParseMode.HTML, reply_markup=markup)
 
-    elif message.chat.type in ['group', 'supergroup']:  # Обробка для груп
-
-        add_user(user_id, first_name)
-        
+    elif message.chat.type in ['group', 'supergroup']:  # Обробка для груп     
         greeting_text = f'Привіт, <b>{first_name}!</b> 😊\n💼 Я бот для конвертації тексту у голос 🎙️\n\n<b>Щоб використовувати мої функції у групі:</b>\n✅ Надішліть /voice <i>текст</i> для конвертації\n✅ Використовуйте /lang для вибору мови'
         await message.reply(greeting_text, parse_mode=types.ParseMode.HTML)
 
@@ -354,7 +351,7 @@ async def show_users(message: types.Message):
         count = get_users_count()
         if users:
             text = "\n".join([f"{user[1]} (ID: {user[0]})" for user in users])
-            await message.answer(f"{count}\n\n📋 Список користувачів:\n{text}")
+            await message.answer(f"{count}")
         else:
             await message.answer("❌ У базі немає користувачів.")
     else:
@@ -365,10 +362,8 @@ async def convert_command(message: types.Message, state: FSMContext):
         if message.chat.type in ['group', 'supergroup']:
             text = ' '.join(message.text.split()[1:])
             if not text:
-                add_user(user_id, first_name)
                 await message.reply("Ви не написали текст.")
             else:
-                add_user(user_id, first_name)
                 voice = user_voice.get(message.from_user.id, 'uk')  # default voice
                 language = voice.split("-")[0]
                 speech = gTTS(text=text, lang=language, slow=False)
@@ -385,7 +380,6 @@ async def voice_command(message: types.Message, state: FSMContext):
             user_id = message.from_user.id
             lang_code = user_voice.get(user_id, 'uk')  # Отримуємо поточний голос користувача
             lang_name = next((name for code, name in voices.values() if code == lang_code), 'Українська 🇺🇦')
-            add_user(user_id, first_name)
             markup = get_first_page_keyboard()  # Використовуємо оновлену клавіатуру
 
             await message.reply(
@@ -529,7 +523,6 @@ async def convert_to_voice(message: types.Message, state: FSMContext):
 
     # Вихід із режиму, якщо натиснута кнопка
     if text in ['🗣️Вибрати голос', 'Інструкція📜', '🔙Меню', '⭐️Збережене', 'Конвертація🔊']:
-        add_user(user_id, first_name)
         await state.finish()
         await process_message(message, state)
         return
