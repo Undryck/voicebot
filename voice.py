@@ -400,7 +400,6 @@ user_voice_messages = {}
 async def process_message(message: types.Message, state: FSMContext):
     if message.chat.type == 'private':
         #subscribed = await check_sub_channels(CHANNELS, message.from_user.id)
-        add_user(user_id, first_name)
         #if subscribed:
         if message.text == '🗣️Вибрати голос':
             user_id = message.from_user.id
@@ -530,6 +529,7 @@ async def convert_to_voice(message: types.Message, state: FSMContext):
 
     # Вихід із режиму, якщо натиснута кнопка
     if text in ['🗣️Вибрати голос', 'Інструкція📜', '🔙Меню', '⭐️Збережене', 'Конвертація🔊']:
+        add_user(user_id, first_name)
         await state.finish()
         await process_message(message, state)
         return
