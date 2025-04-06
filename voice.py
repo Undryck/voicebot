@@ -372,9 +372,7 @@ async def convert_command(message: types.Message, state: FSMContext):
                 speech = gTTS(text=text, lang=language, slow=False)
                 speech.save("speech.ogg")
                 audio = open("speech.ogg", "rb")
-                save_button = InlineKeyboardMarkup()
-                save_button.add(InlineKeyboardButton("⭐ Додати в збережене", callback_data=f"save_{short_id}"))
-                await message.reply_audio(audio, caption="@Voice_text_ua_bot", repy_keyboard=save_button)
+                await message.reply_audio(audio, caption="@Voice_text_ua_bot")
                 os.remove("speech.ogg")
 
 @dp.message_handler(commands=['lang'])
