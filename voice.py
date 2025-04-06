@@ -313,6 +313,9 @@ async def start_command(message: types.Message, state: FSMContext):
         await message.answer(greeting_text, parse_mode=types.ParseMode.HTML, reply_markup=markup)
 
     elif message.chat.type in ['group', 'supergroup']:  # Обробка для груп
+
+        add_user(user_id, first_name)
+        
         greeting_text = f'Привіт, <b>{first_name}!</b> 😊\n💼 Я бот для конвертації тексту у голос 🎙️\n\n<b>Щоб використовувати мої функції у групі:</b>\n✅ Надішліть /voice <i>текст</i> для конвертації\n✅ Використовуйте /lang для вибору мови'
         await message.reply(greeting_text, parse_mode=types.ParseMode.HTML)
 
@@ -362,14 +365,18 @@ async def convert_command(message: types.Message, state: FSMContext):
         if message.chat.type in ['group', 'supergroup']:
             text = ' '.join(message.text.split()[1:])
             if not text:
+                add_user(user_id, first_name)
                 await message.reply("Ви не написали текст.")
             else:
+                add_user(user_id, first_name)
                 voice = user_voice.get(message.from_user.id, 'uk')  # default voice
                 language = voice.split("-")[0]
                 speech = gTTS(text=text, lang=language, slow=False)
                 speech.save("speech.ogg")
                 audio = open("speech.ogg", "rb")
-                await message.reply_audio(audio, caption="@Voice_text_ua_bot")
+                save_button = InlineKeyboardMarkup()
+                save_button.add(InlineKeyboardButton("⭐ Додати в збережене", callback_data=f"save_{short_id}"))
+                await message.reply_audio(audio, caption="@Voice_text_ua_bot", repy_keyboard=save_button)
                 os.remove("speech.ogg")
 
 @dp.message_handler(commands=['lang'])
@@ -378,7 +385,7 @@ async def voice_command(message: types.Message, state: FSMContext):
             user_id = message.from_user.id
             lang_code = user_voice.get(user_id, 'uk')  # Отримуємо поточний голос користувача
             lang_name = next((name for code, name in voices.values() if code == lang_code), 'Українська 🇺🇦')
-
+            add_user(user_id, first_name)
             markup = get_first_page_keyboard()  # Використовуємо оновлену клавіатуру
 
             await message.reply(
@@ -393,7 +400,7 @@ user_voice_messages = {}
 async def process_message(message: types.Message, state: FSMContext):
     if message.chat.type == 'private':
         #subscribed = await check_sub_channels(CHANNELS, message.from_user.id)
-
+        add_user(user_id, first_name)
         #if subscribed:
         if message.text == '🗣️Вибрати голос':
             user_id = message.from_user.id
@@ -442,7 +449,7 @@ async def process_message(message: types.Message, state: FSMContext):
 
             first_name = message.from_user.first_name  # Додаємо отримання імені користувача
 
-            greeting_text = f"Привіт, <b>{first_name}!</b> 😊\n💼 @Voice_text_ua_bot - бот, який вміє конвертувати текст у голос 🎙️\n\nТакож працює у <b>групах</b> та <b>чатах</b>💬\n\n🖇<b>Вміє зберігати потрібні голосові повідомлення\n❗Може озвучувати текст різними мовами та голосами 🇺🇦</b>"
+            greeting_text = f"Привіт, <b>{first_name}!</b> 😊\n💼 @Voice_text_ua_bot - бот, який вміє конвертувати текст у голос 🎙️\n\nТакож працює у <b>групах</b> та <b>чатах</b>💬\n\n🖇<b>Вміє зберігати потрібні голосові повідомлення\n❗Може озвучувати текст різними мовами та голосами</b>"
             await state.finish()
             await message.answer(greeting_text, parse_mode=types.ParseMode.HTML, reply_markup=markup)
             
