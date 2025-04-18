@@ -1,4 +1,5 @@
 import os
+from dotenv import load_dotenv
 import uuid
 import asyncio
 import random
@@ -16,13 +17,14 @@ from aiogram.dispatcher.filters.state import State, StatesGroup
 from aiogram.types import InlineKeyboardMarkup, InlineKeyboardButton, ReplyKeyboardMarkup, KeyboardButton
 
     # Ініціалізація бота та диспетчера
-bot = Bot(token='6333120732:AAEqHvLkp6x-2JMmkvgqzGtMSJNRvh4Nc_U')
+bot = Bot(token="BOT_TOKEN")
 storage = MemoryStorage()
 dp = Dispatcher(bot, storage=storage)
 dp.middleware.setup(LoggingMiddleware())
 
 ADMIN_ID = 5019012143  # ID адміна
-TOKEN = '6333120732:AAEqHvLkp6x-2JMmkvgqzGtMSJNRvh4Nc_U'
+load_dotenv()
+BOT_TOKEN = os.getenv("BOT_TOKEN")
 
 # Підключення до бази даних
 conn = sqlite3.connect("users.db")
