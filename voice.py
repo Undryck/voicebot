@@ -16,15 +16,17 @@ from aiogram.dispatcher.filters import Command
 from aiogram.dispatcher.filters.state import State, StatesGroup
 from aiogram.types import InlineKeyboardMarkup, InlineKeyboardButton, ReplyKeyboardMarkup, KeyboardButton
 
-    # Ініціалізація бота та диспетчера
-bot = Bot(token="BOT_TOKEN")
+# Спочатку завантажуємо .env
+load_dotenv()
+BOT_TOKEN = os.getenv("BOT_TOKEN")
+
+# Ініціалізація бота та диспетчера
+bot = Bot(token=BOT_TOKEN)
 storage = MemoryStorage()
 dp = Dispatcher(bot, storage=storage)
 dp.middleware.setup(LoggingMiddleware())
 
 ADMIN_ID = 5019012143  # ID адміна
-load_dotenv()
-BOT_TOKEN = os.getenv("BOT_TOKEN")
 
 # Підключення до бази даних
 conn = sqlite3.connect("users.db")
@@ -470,7 +472,7 @@ async def process_message(message: types.Message, state: FSMContext):
             for index, (short_id, file_id) in enumerate(saved_voices, start=1):
                 markup.add(InlineKeyboardButton(f"🎙 Голосове №{index}", callback_data=f"play_{short_id}"))
 
-            await message.answer(f"<b>Ваші збережені голосові повідомлення🎵\n\n🖇 Збережено</b> {saved_count}/10\n\n⚙️Для того щоб очистити збережене є команда - /delete", reply_markup=markup, parse_mode=types.ParseMode.HTML)
+            await message.answer(f"<b>Ваші збережені голосові повідомлення🎵\n\n🖇 Збережено</b> {saved_count}/50\n\n⚙️Для того щоб очистити збережене є команда - /delete", reply_markup=markup, parse_mode=types.ParseMode.HTML)
 
         elif message.text == 'Конвертація🔊':
                 # Отримуємо поточний стан користувача
@@ -506,7 +508,7 @@ async def process_message(message: types.Message, state: FSMContext):
 
 user_saved_voices = {}  # user_id -> list of short_ids
 saved_voice_ids = {}  # short_id -> full Telegram file_id
-MAX_SAVED_VOICES = 10  # Ліміт на 10 голосових повідомлень
+MAX_SAVED_VOICES = 50  # Ліміт на 10 голосових повідомлень
 
 @dp.message_handler(state=ConvertToVoiceStep.waiting_for_text, content_types=types.ContentTypes.TEXT)
 async def convert_to_voice(message: types.Message, state: FSMContext):
